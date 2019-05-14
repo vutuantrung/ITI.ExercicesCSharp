@@ -19,13 +19,15 @@ namespace ITI.AVLTree
 
         public int GetNodeHeight(Node node)
         {
-            throw new NotImplementedException();
+            if (node == null) return 0;
+            if (node.Left == null && node.Right == null) return 1;
+            return 1 + Math.Max(GetNodeHeight(node.Left), GetNodeHeight(node.Right));
         }
 
         public Node SearchMin(Node node)
         {
             if (node == null) return null;
-            if (node != null)
+            while(node.Left != null)
             {
                 node = node.Left;
             }
@@ -35,16 +37,36 @@ namespace ITI.AVLTree
         public Node SearchMax(Node node)
         {
             if (node == null) return null;
-            if ( node.Right != null)
+            while (node.Right != null)
             {
                 node = node.Right;
             }
             return node;
         }
 
-        public Node AddNode(int value)
+        public Node AddNode(Node node, int value)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            Node root = node;
+            Node iterator = node;
+            Node parentNode = null;
+
+            if (iterator == null) return CreateNode(value);
+
+            while(iterator != null)
+            {
+                parentNode = iterator;
+                if (value > iterator.Value) iterator = iterator.Right;
+                else iterator = iterator.Left;
+            }
+
+            Node newNode = CreateNode(value);
+            if (value > parentNode.Value) parentNode.Right = newNode;
+            else parentNode.Left = newNode;
+
+            // Balance tree
+
+            return root;
         }
 
         public Node DeleteNode(Node node)
@@ -52,9 +74,25 @@ namespace ITI.AVLTree
             throw new NotImplementedException();
         }
 
-        public Node SearchNodeByValue(int value)
+        public Node SearchNodeByValue(Node node, int value)
         {
-            throw new NotImplementedException();
+            Node iterator = node;
+            if (node == null) return null;
+
+            if (value == iterator.Value) return iterator;
+
+            if (value > iterator.Value)
+            {
+                if (iterator.Right == null) return null;
+                return SearchNodeByValue(node.Right, value);
+            }
+
+            if (value < iterator.Value)
+            {
+                if (iterator.Left == null) return null;
+                return SearchNodeByValue(node.Left, value);
+            }
+            return null;
         }
 
         public void BalanceTree(Node node)
