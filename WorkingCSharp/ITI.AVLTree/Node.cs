@@ -96,36 +96,34 @@ namespace ITI.AVLTree
             throw new NotImplementedException();
         }
 
-        private void LeftRotation()
+        public void LeftRotation()
         {
-            if (_left == null) return;
-            Node<TNode> newRoot = _left;
-            if (Parent.Left == this)
-            {
-                Parent.Left = newRoot;
-            }
-            else
-            {
-                Parent.Right = newRoot;
-            }
-            newRoot.Right = this;
-            _left = null;
+            throw new NotImplementedException();
         }
 
-        private void RightRotation()
+        public void RightRotation()
         {
-            if (Right == null) return;
-            Node<TNode> newRoot = Right;
-            if (Parent.Left == this)
-            {
-                Parent.Left = newRoot;
-            }
-            else
-            {
-                Parent.Right = newRoot;
-            }
-            newRoot.Left = this;
-            _right = null;
+            throw new NotImplementedException();
+        }
+
+        public void LeftLeftRotation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LeftRightRotation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RightLeftRotation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RightRightRotation()
+        {
+            throw new NotImplementedException();
         }
 
         public void IncrementCount()

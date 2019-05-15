@@ -35,14 +35,14 @@ namespace ITI.AVLTree
 
         private void AddToTree(Node<T> node, T value)
         {
-            if(value.CompareTo(node.Value) == 0)
+            if (value.CompareTo(node.Value) == 0)
             {
                 node.IncrementCount();
             }
 
             if (value.CompareTo(node.Value) < 0)
             {
-                if(node.Left == null)
+                if (node.Left == null)
                 {
                     Node<T> newNode = new Node<T>(this, value, node);
                     node.Left = newNode;
@@ -76,18 +76,58 @@ namespace ITI.AVLTree
             Node<T> deleteNode = SearchNode(value);
             if (deleteNode == null) return;
 
-            if(deleteNode.Left == null && deleteNode.Right == null)
+            if (deleteNode.Left == null && deleteNode.Right == null)
             {
                 deleteNode.Parent = null;
             }
-            else if(deleteNode.Left != null && deleteNode.Right != null)
+            else if (deleteNode.Left != null && deleteNode.Right != null)
             {
                 Node<T> nodeReplace = deleteNode.Right.Min();
-            }
-            else
-            {
 
+                if(nodeReplace.Right != null)
+                {
+                    deleteNode.Right.Left = nodeReplace.Right;
+                    nodeReplace.Right.Parent = nodeReplace.Parent;
+                }
+
+                // Replace deleteNode by it's successor
+                nodeReplace.Right = deleteNode.Right;
+                deleteNode.Right.Parent = nodeReplace;
+
+                // Set deleteNode's parent to replaceNode
+                if (deleteNode.Parent.Left == deleteNode) deleteNode.Parent.Left = nodeReplace;
+                else deleteNode.Parent.Right = nodeReplace;
             }
+            else if (deleteNode.Left == null && deleteNode.Right != null)
+            {
+                if(deleteNode.Parent.Left == deleteNode)
+                {
+                    deleteNode.Right.Parent = deleteNode.Parent;
+                    deleteNode.Parent.Left = deleteNode.Right;
+                }
+                else
+                {
+                    deleteNode.Right.Parent = deleteNode.Parent;
+                    deleteNode.Parent.Right = deleteNode.Right;
+                }
+            }
+            else if (deleteNode.Left != null && deleteNode.Right == null)
+            {
+                if (deleteNode.Parent.Left == deleteNode)
+                {
+                    deleteNode.Left.Parent = deleteNode.Parent;
+                    deleteNode.Parent.Left = deleteNode.Left;
+                }
+                else
+                {
+                    deleteNode.Left.Parent = deleteNode.Parent;
+                    deleteNode.Parent.Right = deleteNode.Left;
+                }
+            }
+
+            deleteNode.Parent = null;
+            deleteNode.Left = null;
+            deleteNode.Right = null;
         }
 
         public Node<T> SearchNode(T value)
@@ -99,7 +139,7 @@ namespace ITI.AVLTree
         public Node<T> SearchNode(Node<T> node, T value)
         {
             if (value.CompareTo(node.Value) == 0) return node;
-            if(value.CompareTo(node.Value) < 0 && node.Left != null)
+            if (value.CompareTo(node.Value) < 0 && node.Left != null)
             {
                 return SearchNode(node.Left, value);
             }
@@ -147,10 +187,10 @@ namespace ITI.AVLTree
                     _currentNode = _currentNode.Right;
                     return true;
                 }
-                if(_currentNode.Parent != null)
+                if (_currentNode.Parent != null)
                 {
                     Node<T> parentNode = _currentNode.Parent;
-                    while(parentNode != null && _currentNode == parentNode.Right)
+                    while (parentNode != null && _currentNode == parentNode.Right)
                     {
                         _currentNode = parentNode;
                         parentNode = parentNode.Parent;
