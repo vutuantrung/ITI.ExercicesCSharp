@@ -6,8 +6,8 @@ namespace ITI.AVLTree
 {
     public class Node<TNode> : IComparable<TNode> where TNode : IComparable
     {
-        public Node<TNode> _left;
-        public Node<TNode> _right;
+        Node<TNode> _left;
+        Node<TNode> _right;
         public TNode Value { get; set; }
 
         public Tree<TNode> Tree { get; set; }
