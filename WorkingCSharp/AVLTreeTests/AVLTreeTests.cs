@@ -1,4 +1,5 @@
-﻿using ITI.AVLTree;
+﻿using FluentAssertions;
+using ITI.AVLTree;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,25 @@ namespace ITI.AVLTreeTests
 {
     public class AVLTreeTests
     {
-        NodeHelpers _nodeHelper = new NodeHelpers();
-
         [Test]
-        public void can_create_node()
+        public void can_add_node()
         {
-            Node newNode = _nodeHelper.CreateNode(1);
+            Tree<int> tree = new Tree<int>();
+            tree.Add(5);
+            tree.Count.Should().Be(1);
 
-            Assert.That(newNode.Value == 1);
-            Assert.That(newNode.Left == null);
-            Assert.That(newNode.Right == null);
+            tree.Add(1);
+            tree.Add(2);
+            tree.Add(8);
+            tree.Count.Should().Be(4);
+
+            tree.Add(5);
+            tree.Count.Should().Be(5);
+
+            tree.SearchNode(tree.Head, 1).Count.Should().Be(1);
+            tree.SearchNode(tree.Head, 2).Count.Should().Be(1);
+            tree.SearchNode(tree.Head, 8).Count.Should().Be(1);
+            tree.SearchNode(tree.Head, 5).Count.Should().Be(2);
         }
     }
 }

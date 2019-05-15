@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace ITI.AVLTree
@@ -11,38 +12,60 @@ namespace ITI.AVLTree
 
         int _count;
 
-        public int Count() => _count;
+        public int Count => _count;
+
+        public Tree()
+        {
+            Head = null;
+            _count = 0;
+        }
 
         public void Add(T value)
         {
             if (Head == null)
             {
-                Head = new Node<T>(this, value);
-                return;
+                Head = new Node<T>(this, value, null);
             }
-
-            AddToTree(Head, value);
+            else
+            {
+                AddToTree(Head, value);
+            }
             _count++;
         }
 
         private void AddToTree(Node<T> node, T value)
         {
-            if (node.Left == null && node.Right == null)
+            if(value.CompareTo(node.Value) == 0)
             {
-                Node<T> newNode = new Node<T>(this, value);
-                if (value.CompareTo(node.Value) > 0) node.Left = newNode;
-                else node.Right = newNode;
-                newNode.Parent = node;
+                node.IncrementCount();
             }
 
-            if (value.CompareTo(node.Value) < 0 && node.Left != null)
+            if (value.CompareTo(node.Value) < 0)
             {
-                AddToTree(node.Left, value);
+                if(node.Left == null)
+                {
+                    Node<T> newNode = new Node<T>(this, value, node);
+                    node.Left = newNode;
+                    newNode.Parent = node;
+                }
+                else
+                {
+                    AddToTree(node.Left, value);
+                }
             }
 
-            if (value.CompareTo(node.Value) > 0 && node.Right != null)
+            if (value.CompareTo(node.Value) > 0)
             {
-                AddToTree(node.Right, value);
+                if (node.Right == null)
+                {
+                    Node<T> newNode = new Node<T>(this, value, node);
+                    node.Right = newNode;
+                    newNode.Parent = node;
+                }
+                else
+                {
+                    AddToTree(node.Right, value);
+                }
             }
         }
 
@@ -53,6 +76,7 @@ namespace ITI.AVLTree
 
         public Node<T> SearchNode(Node<T> node, T value)
         {
+            Debug.WriteLine(value + " : " + node.Value + " = " + value.CompareTo(node.Value));
             if (value.CompareTo(node.Value) == 0) return node;
             if(value.CompareTo(node.Value) < 0 && node.Left != null)
             {

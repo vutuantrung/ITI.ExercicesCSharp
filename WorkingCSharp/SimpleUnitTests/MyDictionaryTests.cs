@@ -9,7 +9,6 @@ namespace SimpleUnitTests
 {
     public class MyDictionaryTests
     {
-        [Test]
         public void simple_dictionary_add_and_indexer()
         {
             var d = new MyDictionary<int, string>();
@@ -33,7 +32,6 @@ namespace SimpleUnitTests
             d.Count.Should().Be(2);
         }
 
-        [Test]
         public void simple_dictionary_add_and_remove()
         {
             var d = new MyDictionary<string, int>();
@@ -49,7 +47,6 @@ namespace SimpleUnitTests
             d.Count.Should().Be(2);
         }
 
-        [Test]
         public void simple_dictionary_grow_triggered()
         {
             var d = new MyDictionary<int, int>();

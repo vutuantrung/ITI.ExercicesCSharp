@@ -8,7 +8,6 @@ namespace SimpleUnitTests
 {
     public class MyListTests
     {
-        [Test]
         public void one_can_append_a_lot_of_item_in_a_list()
         {
             // Arrange
@@ -25,7 +24,6 @@ namespace SimpleUnitTests
             }
         }
 
-        [Test]
         public void one_can_append_a_lot_of_item_in_a_list_with_ref()
         {
             // Arrange
@@ -44,7 +42,6 @@ namespace SimpleUnitTests
             Assert.Throws<IndexOutOfRangeException>(() => Console.Write(sut[0]));
         }
 
-        [Test]
         public void I_can_foreach_on_my_list()
         {
             var sut = new MyList<object>();
@@ -58,7 +55,6 @@ namespace SimpleUnitTests
             }
         }
 
-        [Test]
         public void diectly_using_the_iterator()
         {
             var sut = new MyList<string>();

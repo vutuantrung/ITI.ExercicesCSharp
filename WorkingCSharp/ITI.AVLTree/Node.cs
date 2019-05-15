@@ -8,6 +8,10 @@ namespace ITI.AVLTree
     {
         Node<TNode> _left;
         Node<TNode> _right;
+        int _count;
+
+        public int Count => _count;
+
         public TNode Value { get; set; }
 
         public Tree<TNode> Tree { get; set; }
@@ -40,10 +44,12 @@ namespace ITI.AVLTree
 
         public Node<TNode> Parent { get; set; }
 
-        public Node(Tree<TNode> tree, TNode value)
+        public Node(Tree<TNode> tree, TNode value, Node<TNode> parent)
         {
             Tree = tree;
             Value = value;
+            Parent = parent;
+            _count = 1;
         }
 
         public int BalanceFactor => Right.Height - Left.Height;
@@ -120,6 +126,11 @@ namespace ITI.AVLTree
             }
             newRoot.Left = this;
             _right = null;
+        }
+
+        public void IncrementCount()
+        {
+            _count++;
         }
 
         private TreeState State
