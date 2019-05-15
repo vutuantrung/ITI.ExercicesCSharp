@@ -148,7 +148,6 @@ namespace ITI.Collections
                 throw new NotImplementedException();
             }
 
-
             public void Dispose()
             {
             }
