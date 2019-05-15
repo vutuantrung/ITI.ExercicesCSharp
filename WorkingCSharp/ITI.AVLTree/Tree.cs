@@ -69,14 +69,35 @@ namespace ITI.AVLTree
             }
         }
 
-        public void Remove(T value)
+        public void RemoveNode(T value)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            if (Head == null) return;
+            Node<T> deleteNode = SearchNode(value);
+            if (deleteNode == null) return;
+
+            if(deleteNode.Left == null && deleteNode.Right == null)
+            {
+                deleteNode.Parent = null;
+            }
+            else if(deleteNode.Left != null && deleteNode.Right != null)
+            {
+                Node<T> nodeReplace = deleteNode.Right.Min();
+            }
+            else
+            {
+
+            }
+        }
+
+        public Node<T> SearchNode(T value)
+        {
+            if (Head == null) return null;
+            return SearchNode(Head, value);
         }
 
         public Node<T> SearchNode(Node<T> node, T value)
         {
-            Debug.WriteLine(value + " : " + node.Value + " = " + value.CompareTo(node.Value));
             if (value.CompareTo(node.Value) == 0) return node;
             if(value.CompareTo(node.Value) < 0 && node.Left != null)
             {

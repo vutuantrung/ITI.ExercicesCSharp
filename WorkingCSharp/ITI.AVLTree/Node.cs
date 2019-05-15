@@ -67,7 +67,7 @@ namespace ITI.AVLTree
         public Node<TNode> SearchMin()
         {
             Node<TNode> iterator = this;
-            while(iterator.Left != null)
+            while (iterator.Left != null)
             {
                 iterator = iterator.Left;
             }
@@ -79,7 +79,7 @@ namespace ITI.AVLTree
         public Node<TNode> SearchMax()
         {
             Node<TNode> iterator = this;
-            while(iterator.Right != null)
+            while (iterator.Right != null)
             {
                 iterator = iterator.Right;
             }
@@ -100,7 +100,7 @@ namespace ITI.AVLTree
         {
             if (_left == null) return;
             Node<TNode> newRoot = _left;
-            if(Parent.Left == this)
+            if (Parent.Left == this)
             {
                 Parent.Left = newRoot;
             }
@@ -131,6 +131,32 @@ namespace ITI.AVLTree
         public void IncrementCount()
         {
             _count++;
+        }
+
+        public Node<TNode> Predecessor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Node<TNode> Successor()
+        {
+            if (Right != null)
+            {
+                return Right.Min();
+            }
+            if (Parent != null)
+            {
+                Node<TNode> iterator = this;
+                Node<TNode> parentNode = Parent;
+
+                while (parentNode != null && iterator == parentNode.Right)
+                {
+                    iterator = parentNode;
+                    parentNode = parentNode.Parent;
+                }
+                return parentNode;
+            }
+            return null;
         }
 
         private TreeState State
