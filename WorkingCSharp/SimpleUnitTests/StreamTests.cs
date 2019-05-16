@@ -15,7 +15,6 @@ namespace SimpleUnitTests
     {
         static string ThisFilePath([CallerFilePath]string p = null) => p;
 
-        [Test]
         public void copying_stream_to_stream()
         {
             var origin = ThisFilePath();
@@ -26,8 +25,6 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(target))
                 .Should().BeTrue();
-
-            if (File.Exists(target)) File.Delete(target);
         }
 
         void CopyFile(string origin, string target)
@@ -47,7 +44,6 @@ namespace SimpleUnitTests
         }
 
 
-        [Test]
         public void krabouille_works()
         {
             var origin = ThisFilePath();
@@ -65,12 +61,8 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(restored))
                 .Should().BeTrue();
-
-            if (File.Exists(crypted)) File.Delete(crypted);
-            if (File.Exists(restored)) File.Delete(restored);
         }
 
-        [Test]
         public void krabouille_requires_the_passphrase()
         {
             var origin = ThisFilePath();
@@ -88,9 +80,6 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(failed))
                 .Should().BeFalse();
-
-            if (File.Exists(crypted)) File.Delete(crypted);
-            if (File.Exists(failed)) File.Delete(failed);
         }
 
 

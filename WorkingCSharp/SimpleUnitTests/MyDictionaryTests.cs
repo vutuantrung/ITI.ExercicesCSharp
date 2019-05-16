@@ -21,7 +21,7 @@ namespace SimpleUnitTests
             d.Count.Should().Be(2);
 
             d.Invoking(x => x.Add(4, "Four bis"))
-               .Should().Throw<Exception>();
+               .Should().Throw<InvalidOperationException>();
 
             d.Invoking(sut => Console.WriteLine(sut[3712]))
                 .Should().Throw<KeyNotFoundException>();
