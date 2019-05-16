@@ -26,6 +26,8 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(target))
                 .Should().BeTrue();
+
+            if (File.Exists(target)) File.Delete(target);
         }
 
         void CopyFile(string origin, string target)
@@ -63,8 +65,9 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(restored))
                 .Should().BeTrue();
+
             if (File.Exists(crypted)) File.Delete(crypted);
-            if (File.Exists(restored)) File.Delete(crypted);
+            if (File.Exists(restored)) File.Delete(restored);
         }
 
         [Test]
@@ -86,8 +89,8 @@ namespace SimpleUnitTests
                 .SequenceEqual(File.ReadAllBytes(failed))
                 .Should().BeFalse();
 
-            if (File.Exists(failed)) File.Delete(failed);
             if (File.Exists(crypted)) File.Delete(crypted);
+            if (File.Exists(failed)) File.Delete(failed);
         }
 
 
