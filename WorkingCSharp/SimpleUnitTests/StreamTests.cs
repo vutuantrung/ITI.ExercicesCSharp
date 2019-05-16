@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using ITI.Collections;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,25 +26,102 @@ namespace SimpleUnitTests
             File.ReadAllBytes(origin)
                 .SequenceEqual(File.ReadAllBytes(target))
                 .Should().BeTrue();
-
-            if (File.Exists(target))
-            {
-                File.Delete(target);
-            }
         }
 
         void CopyFile(string origin, string target)
         {
-            using (FileStream fs_r = new FileStream(origin, FileMode.Open, FileAccess.Read, FileShare.None))
-            using (FileStream fs_w = new FileStream(target, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var o = new FileStream(origin, FileMode.Open, FileAccess.Read))
+            using (var t = new FileStream(target, FileMode.Create, FileAccess.Write))
             {
-                byte[] b = new byte[1024];
+                byte[] buffer = new byte[4096];
                 int len;
                 do
                 {
-                    len = fs_r.Read(b, 0, b.Length);
-                    fs_w.Write(b, 0, len);
-                } while (len == b.Length);
+                    len = o.Read(buffer, 0, buffer.Length);
+                    t.Write(buffer, 0, len);
+                }
+                while (len == buffer.Length);
+            }
+        }
+
+
+        [Test]
+        public void krabouille_works()
+        {
+            var origin = ThisFilePath();
+            var crypted = origin + ".krab";
+            var restored = crypted + ".clear";
+
+            DoKrabouille(origin, crypted, "Secret...");
+
+            File.ReadAllBytes(origin)
+                .SequenceEqual(File.ReadAllBytes(crypted))
+                .Should().BeFalse("Nothing has been krabouilled!");
+
+            DoUnkrabouille(crypted, restored, "Secret...");
+
+            File.ReadAllBytes(origin)
+                .SequenceEqual(File.ReadAllBytes(restored))
+                .Should().BeTrue();
+            if (File.Exists(crypted)) File.Delete(crypted);
+            if (File.Exists(restored)) File.Delete(crypted);
+        }
+
+        [Test]
+        public void krabouille_requires_the_passphrase()
+        {
+            var origin = ThisFilePath();
+            var crypted = origin + ".krab";
+            var failed = crypted + ".failed";
+
+            DoKrabouille(origin, crypted, "Secret1");
+
+            File.ReadAllBytes(origin)
+                .SequenceEqual(File.ReadAllBytes(crypted))
+                .Should().BeFalse();
+
+            DoUnkrabouille(crypted, failed, "Secret2");
+
+            File.ReadAllBytes(origin)
+                .SequenceEqual(File.ReadAllBytes(failed))
+                .Should().BeFalse();
+
+            if (File.Exists(failed)) File.Delete(failed);
+            if (File.Exists(crypted)) File.Delete(crypted);
+        }
+
+
+        void DoKrabouille(string origin, string crypted, string passPhrase)
+        {
+            using (var o = new FileStream(origin, FileMode.Open, FileAccess.Read))
+            using (var t = new FileStream(crypted, FileMode.Create, FileAccess.Write))
+            using (var k = new KrabouilleStream(t, passPhrase, KrabouilleMode.Krabouille))
+            {
+                byte[] buffer = new byte[4096];
+                int len;
+                do
+                {
+                    len = o.Read(buffer, 0, buffer.Length);
+                    k.Write(buffer, 0, len);
+                }
+                while (len == buffer.Length);
+            }
+        }
+
+        void DoUnkrabouille(string crypted, string restored, string passPhrase)
+        {
+            using (var o = new FileStream(crypted, FileMode.Open, FileAccess.Read))
+            using (var t = new FileStream(restored, FileMode.Create, FileAccess.Write))
+            using (var uk = new KrabouilleStream(o, passPhrase, KrabouilleMode.Unkrabouille))
+            {
+                byte[] buffer = new byte[4096];
+                int len;
+                do
+                {
+                    len = uk.Read(buffer, 0, buffer.Length);
+                    t.Write(buffer, 0, len);
+                }
+                while (len == buffer.Length);
             }
         }
     }
