@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ITI.Tokenizer
 {
@@ -24,6 +22,7 @@ namespace ITI.Tokenizer
         SemiColon,
         Colon,
         DoubleColon,
+        QuestionMark,
 
         EndOfInput,
         Error
